@@ -1,6 +1,8 @@
 import streamlit as st
 import numpy as np
 import pickle
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.preprocessing import StandardScaler
 
 # --- Load model ---
 model = pickle.load(open("gb_churn_model.pkl", "rb"))
@@ -10,7 +12,7 @@ st.set_page_config(page_title="Customer Churn Prediction", layout="centered")
 st.title("📊 Customer Churn Prediction App")
 st.write("Enter customer details to predict churn")
 
-# --- INPUTS (match your dataset columns) ---
+# --- INPUTS  ---
 
 credit_score = st.number_input("Credit Score", min_value=300, max_value=900)
 age = st.number_input("Age", min_value=18, max_value=100)
@@ -23,13 +25,13 @@ salary = st.number_input("Estimated Salary", min_value=0.0)
 gender = st.selectbox("Gender", ["Male", "Female"])
 geography = st.selectbox("Geography", ["France", "Spain", "Germany"])
 
-# --- Convert categorical → numeric (same as training) ---
+# --- Convert categorical → numeric  ---
 gender = 1 if gender == "Male" else 0
 
 geo_map = {"France": 0, "Spain": 1, "Germany": 2}
 geography = geo_map[geography]
 
-# --- Create input array (ORDER MUST MATCH TRAINING) ---
+# --- Create input array  ---
 input_data = np.array([[credit_score, geography, gender, age,
                         tenure, balance, products, salary]])
 
